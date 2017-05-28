@@ -1,3 +1,4 @@
+#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <random>
@@ -13,6 +14,14 @@ double get_cpu_time(void)
    return time;
 }
 
+double expected_flips(uint64_t n)
+{
+   double pn = std::pow((double)(0.5), n);
+   double numerator = 1 - pn;
+   double denominator = pn*(1-(double)(0.5));
+   return numerator / denominator;
+}
+
 void test_flips(uint64_t n)
 {
    std::random_device rd;
@@ -21,14 +30,17 @@ void test_flips(uint64_t n)
    
    uint64_t count_heads = 0;
    uint64_t max_run = 0;
-   for(uint64_t i = 0; max_run < n; i++) {
+   for(uint64_t i = 1; max_run < n; i++) {
       uint_fast8_t flip = flipper(re);
       if(flip == 1) {
          count_heads++;
          if(count_heads > max_run) {
             max_run++;
             double time = get_cpu_time();
-            std::cout << max_run << "\t" << i << "\t" << time << std::endl;
+            double expected = expected_flips(max_run);
+            double difference = expected - (double)i;
+            double p_diff = (difference) / (expected);
+            std::cout << max_run << "\t" << i << "\t" << expected << "\t" << difference << "\t" << p_diff << "\t" << time << std::endl;
          }
       } else {
          count_heads = 0;
@@ -38,6 +50,7 @@ void test_flips(uint64_t n)
 
 int main(int argc, char** argv)
 {
+   std::cout << "expected flips = " << expected_flips(500) << std::endl;
    test_flips(500);
 	return 0;
 }
