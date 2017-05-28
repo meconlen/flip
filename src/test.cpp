@@ -4,9 +4,13 @@
 #include <random>
 
 #include <boost/multiprecision/cpp_int.hpp>
+#include <boost/multiprecision/cpp_dec_float.hpp>
 
 #include <sys/time.h>
 #include <sys/resource.h>
+
+typedef boost::multiprecision::number<boost::multiprecision::cpp_dec_float<1000> > float_type;
+
 
 double get_cpu_time(void)
 {
@@ -18,7 +22,7 @@ double get_cpu_time(void)
 
 boost::multiprecision::cpp_int expected_flips(uint64_t n)
 {
-   return boost::multiprecision::pow(boost::multiprecision::cpp_int(2), (uint64_t)(n+1))-2;
+   return boost::multiprecision::pow(boost::multiprecision::cpp_int(2), n+1)-2;
 }
 
 void test_flips(uint64_t n)
@@ -41,8 +45,8 @@ void test_flips(uint64_t n)
             double time = get_cpu_time();
             boost::multiprecision::cpp_int expected = expected_flips(max_run);
             boost::multiprecision::cpp_int difference = i - expected;
-            double p_diff = ((double)difference) / ((double)expected);
-            double ratio_diff = (double)(1) - (double)(heads)/(double)(tails);
+            float_type p_diff = float_type(difference) / float_type(expected);
+            float_type ratio_diff = float_type(1) - float_type(heads)/float_type(tails);
             boost::multiprecision::cpp_int ht_diff = heads - tails;
             std::cout << max_run << "\t" << i << "\t" << expected << "\t" << difference << "\t" << p_diff << "\t" << heads << "\t" << tails << "\t" << "\t" << ht_diff << "\t" <<ratio_diff << "\t" << time << std::endl;
          }
