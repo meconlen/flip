@@ -14,12 +14,9 @@ double get_cpu_time(void)
    return time;
 }
 
-double expected_flips(uint64_t n)
+uint64_t expected_flips(uint64_t n)
 {
-   double pn = std::pow((double)(0.5), n);
-   double numerator = 1 - pn;
-   double denominator = pn*(1-(double)(0.5));
-   return numerator / denominator;
+   return std::pow(2, n+1)-2;
 }
 
 void test_flips(uint64_t n)
@@ -30,20 +27,24 @@ void test_flips(uint64_t n)
    
    uint64_t count_heads = 0;
    uint64_t max_run = 0;
-   std::cout << "run\tactual\texpected\tdifference\t% diff\ttime" << std::endl;
+   uint64_t heads = 0, tails = 0;
+   std::cout << "run\tactual\texpected\tdifference\t% diff\theads\ttails\tratio diff\ttime" << std::endl;
    for(uint64_t i = 1; max_run < n; i++) {
       uint_fast8_t flip = flipper(re);
       if(flip == 1) {
+         heads++;
          count_heads++;
          if(count_heads > max_run) {
             max_run++;
             double time = get_cpu_time();
-            double expected = expected_flips(max_run);
-            double difference = expected - (double)i;
-            double p_diff = (difference) / (expected);
-            std::cout << max_run << "\t" << (double)i << "\t" << expected << "\t" << difference << "\t" << p_diff << "\t" << time << std::endl;
+            uint64_t expected = expected_flips(max_run);
+            int64_t difference = (double)i - expected;
+            double p_diff = ((double)difference) / ((double)expected);
+            double ratio_diff = (double)(1) - (double)(heads)/(double)(tails);
+            std::cout << max_run << "\t" << i << "\t" << expected << "\t" << difference << "\t" << p_diff << "\t" << heads << "\t" << tails << "\t" << ratio_diff << "\t" << time << std::endl;
          }
       } else {
+         tails++;
          count_heads = 0;
       }
    }
