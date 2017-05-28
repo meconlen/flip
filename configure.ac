@@ -1,5 +1,5 @@
 AC_PREREQ(2.61)
-AC_INIT([programName], [0.1], [mike@conlen.org])
+AC_INIT([flips], [0.1], [mike@conlen.org])
 AC_CONFIG_SRCDIR([src/test.cpp])
 AC_CONFIG_HEADERS([config.h])
 AM_INIT_AUTOMAKE([-Wall -Werror])
@@ -7,7 +7,7 @@ LT_INIT
 AC_PROG_CXX([g++])
 AC_HEADER_STDC
 
-CXXFLAGS="$CXXFLAGS --std=c++0x"
+CXXFLAGS="$CXXFLAGS --std=c++14"
 LDFLAGS="$LDFLAGS"
 AC_CHECK_HEADERS([stdio.h])
 AC_CHECK_HEADERS([stdlib.h])
@@ -19,9 +19,5 @@ AC_FUNC_MMAP
 AC_CHECK_FUNCS([fstat])
 AC_CONFIG_FILES([Makefile
 	src/Makefile
-])
-AC_CONFIG_SUBDIRS([
-	googletest/googletest
-	googletest/googlemock
 ])
 AC_OUTPUT
