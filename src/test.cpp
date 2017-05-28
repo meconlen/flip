@@ -30,6 +30,7 @@ void test_flips(uint64_t n)
    
    uint64_t count_heads = 0;
    uint64_t max_run = 0;
+   std::cout << "run\tactual\texpected\tdifference\t% diff\ttime" << std::endl;
    for(uint64_t i = 1; max_run < n; i++) {
       uint_fast8_t flip = flipper(re);
       if(flip == 1) {
@@ -40,7 +41,7 @@ void test_flips(uint64_t n)
             double expected = expected_flips(max_run);
             double difference = expected - (double)i;
             double p_diff = (difference) / (expected);
-            std::cout << max_run << "\t" << i << "\t" << expected << "\t" << difference << "\t" << p_diff << "\t" << time << std::endl;
+            std::cout << max_run << "\t" << (double)i << "\t" << expected << "\t" << difference << "\t" << p_diff << "\t" << time << std::endl;
          }
       } else {
          count_heads = 0;
